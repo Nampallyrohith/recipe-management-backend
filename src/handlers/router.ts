@@ -42,6 +42,24 @@ router.post(
     })
   );
   
+  router.put(
+    "/recipes/:id",
+    defineRoute(async (req, res) => {
+      try {
+        const { id } = req.params;
+        const updatedRecipe = await Recipe.findByIdAndUpdate(id, req.body, {
+          new: true,
+        });
+        if (!updatedRecipe)
+          return res.status(404).json({ error: "Recipe not found" });
+        res.json(updatedRecipe);
+      } catch (err) {
+        res.status(500).json({ error: err });
+      }
+    })
+  );
+  
+
 
 
 
