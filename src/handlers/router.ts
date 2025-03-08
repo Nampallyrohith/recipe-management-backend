@@ -58,6 +58,36 @@ router.post(
       }
     })
   );
+
+    // Endpoint to update order of recipes
+    router.put(
+        "/recipes/reorder",
+        defineRoute(async (req, res) => {
+          try {
+            const { updatedRecipes } = req.body;
+            for (let recipe of updatedRecipes) {
+              await Recipe.findByIdAndUpdate(recipe._id, { order: recipe.order });
+            }
+            res.json({ message: "Order updated successfully" });
+          } catch (err) {
+            res.status(500).json({ error: err });
+          }
+        })
+      );
+      
+      router.get(
+        "/recipes/random",
+        defineRoute(async (req, res) => {
+          try {
+            const count = await Recipe.countDocuments();
+            const randomIndex = Math.floor(Math.random() * count);
+            const randomRecipe = await Recipe.findOne().skip(randomIndex);
+            res.json(randomRecipe);
+          } catch (err) {
+            res.status(500).json({ error: err });
+          }
+        })
+      );
   
 
 
